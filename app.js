@@ -4,6 +4,7 @@ const shopRoutes = require('./routes/shop')
 const authRoutes = require('./routes/auth')
 const adminRoutes = require('./routes/admin')
 const sequelize = require('./util/database')
+const bcrypt = require('bcrypt')
 
 const app = express()
 const port = process.env.PORT || 3001
@@ -15,13 +16,16 @@ app.use(express.json())
 
 app.use(async (req, res, next) => {
     console.log('what is this')
-    const user = await User.findByPk(1)
+    const user = await User.findByPk(2)
     if (user === null) {
-        console.log('not found')
+        // User not found
+
+        const hashedPassword = await bcrypt.hash('edopassword', 12)
+
         User.create({
             name: "Edo",
             email: "edo@edo.com",
-            password: "somepassword",
+            password: hashedPassword,
             role: 'admin'
         })
     } else {
