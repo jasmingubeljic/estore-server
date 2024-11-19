@@ -15,11 +15,11 @@ const Product = sequelize.define('product', {
     type: Sequelize.DOUBLE,
     allowNull: false
   },
-  imageUrl: {
+  description: {
     type: Sequelize.STRING,
     allowNull: false
   },
-  description: {
+  category: {
     type: Sequelize.STRING,
     allowNull: false
   }
