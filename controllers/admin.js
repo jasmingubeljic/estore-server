@@ -1,7 +1,14 @@
 const Product = require('../models/product')
+const { validationResult } = require("express-validator")
 
 module.exports.createProduct = async (req, res, next) => {
-    const { title, price, description, category} = req.body
+    const { title, price, description, category } = req.body
+    const errors = validationResult(req)
+
+    if (!errors.isEmpty()) {
+        return res.status(422).json({"messages": errors})
+    }
+        
     Product
         .create({...req.body})
         .then(r => res.status(201).json(r))
