@@ -10,9 +10,8 @@ module.exports.createProduct = async (req, res, next) => {
         return res.status(422).json({"messages": errors})
     }
 
-
     if (!req.file) {
-        return res.status(422).json({"messages": ['No image provided']})
+        return res.status(422).json({ "messages": { "errors": [{ "msg": 'No image has been provided' }] } })
     }
     const imageUrl = req.file.path
         
