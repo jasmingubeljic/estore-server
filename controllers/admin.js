@@ -5,12 +5,25 @@ module.exports.createProduct = async (req, res, next) => {
     const { title, price, description, category } = req.body
     const errors = validationResult(req)
 
+    console.log('request', req)
     if (!errors.isEmpty()) {
         return res.status(422).json({"messages": errors})
     }
+
+
+    if (!req.file) {
+        return res.status(422).json({"messages": ['No image provided']})
+    }
+    const imageUrl = req.file.path
         
     Product
-        .create({...req.body})
+        .create({
+            title,
+            imageUrl,
+            price,
+            description,
+            category
+        })
         .then(r => res.status(201).json(r))
         .catch(err => console.log(err))
 
