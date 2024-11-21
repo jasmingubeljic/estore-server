@@ -29,16 +29,33 @@ module.exports.createProduct = async (req, res, next) => {
 }
 
 module.exports.updateProduct = async (req, res, next) => {
-    if (req.body.id) {
-        Product.update({
-            ...req.body
-        },{
-            where: {
-                id: req.body.id
-            }
-        })
-        res.status(200).json({id})
+    const id = req.params.id
+    const { title, price, description, category } = req.body
+    let imageUrl = req.body.image
+    if (req.file) {
+        imageUrl = req.file.path
     }
+    if (!imageUrl) {
+         return res.status(422).json({ "messages": { "errors": [{ "msg": 'No image has been provided' }] } })
+    }
+
+    const product = await Product.findByPk(id)
+
+    if (product) {
+        product.title = title,
+        product.price = price,
+        product.description = description,
+        product.category = category,
+        product.imageUrl = imageUrl
+    }
+
+    const result = await product.save()
+    if (result) {
+        res.status(201).json(result.dataValues)
+    } else {
+        res.status(500).json({"error": "Server failed!"})
+    }
+    
 
 }
 
