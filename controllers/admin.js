@@ -33,23 +33,25 @@ module.exports.createProduct = async (req, res, next) => {
 module.exports.updateProduct = async (req, res, next) => {
     const id = req.params.id
     const { title, price, description, category } = req.body
-    let imageUrl = req.body.image
+    let imageUrl = undefined
     if (req.file) {
         imageUrl = req.file.path
     }
-    if (!imageUrl) {
-         return res.status(422).json({ "messages": { "errors": [{ "msg": 'No image has been provided' }] } })
-    }
+    // if (!imageUrl) {
+    //      return res.status(422).json({ "messages": { "errors": [{ "msg": 'No image has been provided' }] } })
+    // }
 
     const product = await Product.findByPk(id)
 
     if (product) {
-        unlinkImage(product.imageUrl)
-        product.title = title,
-        product.price = price,
-        product.description = description,
-        product.category = category,
-        product.imageUrl = imageUrl
+        if(imageUrl) {
+            unlinkImage(product.imageUrl) // delete previous product image
+            product.imageUrl = imageUrl // attach the other value
+        }
+        product.title = title
+        product.price = price
+        product.description = description
+        product.category = category
     }
 
     const result = await product.save()
@@ -63,10 +65,13 @@ module.exports.updateProduct = async (req, res, next) => {
 }
 
 module.exports.deleteProduct = async (req, res, next) => {
-    // Product deletion
-    console.log('prior to product deletion')
-    const result = await Product.destroy({ where: {id: req.body.id}})
-    console.log('after the product deletion', result)
+    const result = await Product.destroy({ where: { id: req.body.id } })
+    if (result === 1) {
+        unlinkImage(req.body.imageUrl)
+        res.status(204).res({message: "Product has been successfuly deleted"})
+    } else {
+        res.status(500).res({message: "Error while deleting a product"})
+    }
 }
 
 
