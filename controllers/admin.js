@@ -65,7 +65,7 @@ module.exports.updateProduct = async (req, res, next) => {
 }
 
 module.exports.deleteProduct = async (req, res, next) => {
-    const result = await Product.destroy({ where: { id: req.body.id } })
+    const result = await Product.destroy({ where: { id: req.params.id } })
     if (result === 1) {
         unlinkImage(req.body.imageUrl)
         res.status(204).json({message: "Product has been successfuly deleted"})

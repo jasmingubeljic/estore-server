@@ -13,6 +13,6 @@ const validate = [
 
 router.post('/product', validate, adminController.createProduct)
 router.put('/product/:id', adminController.updateProduct)
-router.delete('/product', adminController.deleteProduct)
+router.delete('/product/:id', adminController.deleteProduct)
 
 module.exports = router
