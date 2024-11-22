@@ -1,5 +1,7 @@
 const Product = require('../models/product')
 const { validationResult } = require("express-validator")
+const fs = require('fs')
+const path = require('path')
 
 module.exports.createProduct = async (req, res, next) => {
     const { title, price, description, category } = req.body
@@ -42,6 +44,7 @@ module.exports.updateProduct = async (req, res, next) => {
     const product = await Product.findByPk(id)
 
     if (product) {
+        unlinkImage(product.imageUrl)
         product.title = title,
         product.price = price,
         product.description = description,
@@ -64,4 +67,10 @@ module.exports.deleteProduct = async (req, res, next) => {
     console.log('prior to product deletion')
     const result = await Product.destroy({ where: {id: req.body.id}})
     console.log('after the product deletion', result)
+}
+
+
+const unlinkImage = filePath => {
+    filePath = path.join(__dirname, '..', filePath)
+    fs.unlink(filePath, err => console.log(err))
 }
