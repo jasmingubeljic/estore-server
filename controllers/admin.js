@@ -68,9 +68,9 @@ module.exports.deleteProduct = async (req, res, next) => {
     const result = await Product.destroy({ where: { id: req.body.id } })
     if (result === 1) {
         unlinkImage(req.body.imageUrl)
-        res.status(204).res({message: "Product has been successfuly deleted"})
+        res.status(204).json({message: "Product has been successfuly deleted"})
     } else {
-        res.status(500).res({message: "Error while deleting a product"})
+        res.status(500).json({message: "Error while deleting a product"})
     }
 }
 
