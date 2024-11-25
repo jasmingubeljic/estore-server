@@ -39,7 +39,7 @@ app.use('/images', express.static(path.join(__dirname, 'images')))
 
 app.use(async (req, res, next) => {
     console.log('what is this')
-    const user = await User.findByPk(2)
+    const user = await User.findByPk(1)
     if (user === null) {
         // User not found
 
