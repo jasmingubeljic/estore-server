@@ -4,7 +4,7 @@ const fs = require('fs')
 const path = require('path')
 
 module.exports.createProduct = async (req, res, next) => {
-    const { title, price, description, category } = req.body
+    const { title, price, isUsed, description, category, isHidden } = req.body;
     const errors = validationResult(req)
 
     console.log('request', req)
@@ -22,8 +22,10 @@ module.exports.createProduct = async (req, res, next) => {
             title,
             imageUrl,
             price,
+            isUsed,
             description,
-            category
+            category,
+            isHidden
         })
         .then(r => res.status(201).json(r))
         .catch(err => console.log(err))
@@ -32,7 +34,7 @@ module.exports.createProduct = async (req, res, next) => {
 
 module.exports.updateProduct = async (req, res, next) => {
     const id = req.params.id
-    const { title, price, description, category } = req.body
+    const { title, price, isUsed, description, category, isHidden } = req.body
     let imageUrl = undefined
     if (req.file) {
         imageUrl = req.file.path
@@ -50,8 +52,10 @@ module.exports.updateProduct = async (req, res, next) => {
         }
         product.title = title
         product.price = price
+        product.isUsed = isUsed
         product.description = description
         product.category = category
+        product.isHidden = isHidden
     }
 
     const result = await product.save()
