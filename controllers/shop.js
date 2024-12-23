@@ -2,7 +2,6 @@ const Product = require("../models/product");
 
 module.exports.getProducts = async (req, res, next) => {
   const queryOptions = { order: [["updatedAt", "DESC"]] };
-
   if (/^\d+$/.test(req.query.offset)) {
     queryOptions["offset"] = req.query.offset;
   }
@@ -10,7 +9,8 @@ module.exports.getProducts = async (req, res, next) => {
     queryOptions["limit"] = req.query.limit;
   }
   const products = await Product.findAll(queryOptions);
-  res.status(200).json(products);
+  const totalProductCount = await Product.count();
+  res.status(200).json({ products, totalProductCount });
 };
 
 module.exports.getProductById = async (req, res, next) => {
