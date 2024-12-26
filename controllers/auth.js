@@ -11,16 +11,21 @@ module.exports.login = async (req, res, next) => {
 
   const { email, password } = req.body;
   const user = await User.findOne({ where: { email: email } });
+  const tokenDuration = 60 * 60;
 
   if (user) {
     bcrypt.compare(password, user.password, function (err, result) {
       if (result) {
-        const token = jwt.sign({ user }, "secretklsajdfalskjdf", {
-          expiresIn: "2h",
+        const token = jwt.sign(
+          { id: user.id, user: user.name },
+          "this-secret-string-has-to-be-changed-and-moved-outside-of-git",
+          {
+            expiresIn: tokenDuration, // in seconds
+          }
+        );
+        res.status(200).json({
+          token: token,
         });
-        res
-          .status(200)
-          .json({ token: token, user: user.name, userId: user.id });
       } else {
         res.status(404).json({
           messages: [
