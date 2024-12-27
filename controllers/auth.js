@@ -18,7 +18,7 @@ module.exports.login = async (req, res, next) => {
       if (result) {
         const token = jwt.sign(
           { id: user.id, user: user.name },
-          "this-secret-string-has-to-be-changed-and-moved-outside-of-git",
+          "laksjdflaksjdflkj",
           {
             expiresIn: tokenDuration, // in seconds
           }

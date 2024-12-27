@@ -10,6 +10,7 @@ const Category = sequelize.define("category", {
   },
   title: {
     type: Sequelize.STRING,
+    allowNull: false,
   },
   imageUrl: {
     type: Sequelize.STRING,
@@ -17,11 +18,7 @@ const Category = sequelize.define("category", {
   },
   description: {
     type: Sequelize.STRING,
-    allowNull: false,
-  },
-  isHidden: {
-    type: Sequelize.BOOLEAN,
-    allowNull: false,
+    allowNull: true,
   },
 });
 

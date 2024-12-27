@@ -8,6 +8,7 @@ const sequelize = require("./util/database");
 const bcrypt = require("bcrypt");
 const multer = require("multer");
 
+const User = require("./models/user");
 const Product = require("./models/product");
 const Category = require("./models/category");
 
@@ -36,8 +37,6 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-const User = require("./models/user");
-
 app.use(cors());
 app.use(express.json());
 app.use(
@@ -47,13 +46,12 @@ app.use(
 app.use("/images", express.static(path.join(__dirname, "images")));
 
 app.use(async (req, res, next) => {
-  console.log("what is this");
   const user = await User.findByPk(1);
   if (user === null) {
     // User not found
 
     // Following is temporary exposed for the dev purposes
-    const hashedPassword = await bcrypt.hash("edopassword", 12);
+    const hashedPassword = await bcrypt.hash("estore", 10);
 
     User.create({
       name: "eStore",
@@ -62,7 +60,7 @@ app.use(async (req, res, next) => {
       role: "admin",
     });
   } else {
-    console.log("user", user.dataValues);
+    req.user = user;
   }
   next();
 });
@@ -72,10 +70,11 @@ app.use(shopRoutes);
 app.use("/admin", adminRoutes);
 
 User.hasMany(Product);
-// Product.belongsTo(Category);
+User.hasMany(Category);
+Category.hasMany(Product);
 
 sequelize
-  //   .sync({ force: true })
+  // .sync({ force: true })
   .sync()
   .then(
     app.listen(port, () => {
