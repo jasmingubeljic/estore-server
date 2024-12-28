@@ -21,6 +21,17 @@ const validateCreateProduct = [
     .withMessage("Plese choose category to which this product belongs"),
 ];
 
+const validateCreateCategory = [
+  body("title")
+    .trim()
+    .notEmpty()
+    .withMessage("Please enter the title of the product"),
+  body("description")
+    .trim()
+    .notEmpty()
+    .withMessage("Please enter product description"),
+];
+
 router.post(
   "/product",
   isAuth,
@@ -29,5 +40,11 @@ router.post(
 );
 router.put("/product/:id", isAuth, adminController.updateProduct);
 router.delete("/product/:id", isAuth, adminController.deleteProduct);
+router.post(
+  "/category",
+  isAuth,
+  validateCreateCategory,
+  adminController.createCategory
+);
 
 module.exports = router;

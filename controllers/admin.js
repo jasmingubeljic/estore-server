@@ -77,6 +77,32 @@ module.exports.deleteProduct = async (req, res, next) => {
   }
 };
 
+module.exports.createCategory = async (req, res, next) => {
+  const { title, description, isHidden } = req.body;
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ messages: errors });
+  }
+
+  if (!req.file) {
+    return res
+      .status(422)
+      .json({ messages: { errors: [{ msg: "No image has been provided" }] } });
+  }
+  const imageUrl = req.file.path;
+
+  req.user
+    .createCategory({
+      title,
+      imageUrl,
+      description,
+      isHidden,
+    })
+    .then((r) => res.status(201).json(r))
+    .catch((err) => console.log(err));
+};
+
 const unlinkImage = (filePath) => {
   filePath = path.join(__dirname, "..", filePath);
   fs.unlink(filePath, (err) => console.log(err));
