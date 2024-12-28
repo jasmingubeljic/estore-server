@@ -26,8 +26,8 @@ module.exports.createProduct = async (req, res, next) => {
       price,
       isUsed,
       description,
-      category,
       isHidden,
+      categoryId: category,
     })
     .then((r) => res.status(201).json(r))
     .catch((err) => console.log(err));
@@ -55,8 +55,8 @@ module.exports.updateProduct = async (req, res, next) => {
     product.price = price;
     product.isUsed = isUsed;
     product.description = description;
-    product.category = category;
     product.isHidden = isHidden;
+    product.categoryId = category;
   }
 
   const result = await product.save();

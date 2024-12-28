@@ -27,10 +27,6 @@ const Product = sequelize.define("product", {
     type: Sequelize.STRING,
     allowNull: false,
   },
-  category: {
-    type: Sequelize.STRING,
-    allowNull: false,
-  },
   isHidden: {
     type: Sequelize.BOOLEAN,
     allowNull: false,
