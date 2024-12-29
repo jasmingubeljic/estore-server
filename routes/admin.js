@@ -15,7 +15,7 @@ const validateCreateProduct = [
     .withMessage("Please enter product description"),
   body("price").trim().notEmpty().withMessage("Please enter the price"),
   body("price").trim().isNumeric().withMessage("The price has to be a number"),
-  body("category")
+  body("categoryId")
     .trim()
     .notEmpty()
     .withMessage("Plese choose category to which this product belongs"),
