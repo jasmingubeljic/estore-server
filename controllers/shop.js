@@ -1,3 +1,4 @@
+const { Sequelize, Op } = require("sequelize");
 const Product = require("../models/product");
 const Category = require("../models/category");
 
@@ -44,4 +45,26 @@ module.exports.getCategoryById = async (req, res, next) => {
   } else {
     res.status(200).json(category);
   }
+};
+
+module.exports.queryProducts = async (req, res, next) => {
+  const clientQueryStr = req.body.queryString.trim();
+  const query = clientQueryStr.replace(/ /g, " | ");
+
+  const queryOptions = { order: [["updatedAt", "DESC"]] };
+  if (/^\d+$/.test(req.query.offset)) {
+    queryOptions["offset"] = req.query.offset;
+  }
+  if (/^\d+$/.test(req.query.limit)) {
+    queryOptions["limit"] = req.query.limit;
+  }
+
+  queryOptions["where"] = {
+    title: {
+      [Op.match]: Sequelize.fn("to_tsquery", query),
+    },
+  };
+
+  const products = await Product.findAndCountAll(queryOptions);
+  res.status(200).json({ products });
 };
