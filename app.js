@@ -26,11 +26,7 @@ const fileStorage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-  if (
-    file.mimetype === "image/png" ||
-    file.mimetype === "image/jpg" ||
-    file.mimetype === "image/jpeg"
-  ) {
+  if (file.mimetype === "image/png" || file.mimetype === "image/jpg" || file.mimetype === "image/jpeg") {
     cb(null, true);
   } else {
     cb(null, false);
@@ -39,9 +35,7 @@ const fileFilter = (req, file, cb) => {
 
 app.use(cors());
 app.use(express.json());
-app.use(
-  multer({ storage: fileStorage, fileFilter: fileFilter }).single("image")
-);
+app.use(multer({ storage: fileStorage, fileFilter: fileFilter }).single("image"));
 
 app.use("/images", express.static(path.join(__dirname, "images")));
 
@@ -50,12 +44,11 @@ app.use(async (req, res, next) => {
   if (user === null) {
     // User not found
 
-    // Following is temporary exposed for the dev purposes
-    const hashedPassword = await bcrypt.hash("estore", 10);
+    const hashedPassword = bcrypt.hash(process.env.ADMIN_PASSWORD, 10);
 
     User.create({
-      name: "eStore",
-      email: "estore@estore.com",
+      name: process.env.ADMIN_NAME,
+      email: process.env.ADMIN_EMAIL,
       password: hashedPassword,
       role: "admin",
     });
