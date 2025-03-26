@@ -44,7 +44,7 @@ app.use(async (req, res, next) => {
   if (user === null) {
     // User not found
 
-    const hashedPassword = bcrypt.hash(process.env.ADMIN_PASSWORD, 10);
+    const hashedPassword = await bcrypt.hash(process.env.ADMIN_PASSWORD, 10);
 
     User.create({
       name: process.env.ADMIN_NAME,
