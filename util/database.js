@@ -1,18 +1,23 @@
 const pg = require("pg");
 const Sequelize = require("sequelize");
 
-const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
+const options = {
   dialect: "postgres",
-  // host: "localhost",
   host: process.env.DB_HOST,
   dialectModule: pg,
   logging: console.log,
-  // dialectOptions: {
-  //   ssl: {
-  //     require: true,
-  //     rejectUnauthorized: false,
-  //   },
-  // },
-});
+};
+
+if (process.env.NODE_ENV === "PROD") {
+  options["dialectOptions"] = {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
+    },
+  };
+}
+console.log("kjsadflkajsdfkj: ", options);
+
+const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, options);
 
 module.exports = sequelize;
