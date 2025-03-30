@@ -16,7 +16,6 @@ if (process.env.NODE_ENV === "PROD") {
     },
   };
 }
-console.log("kjsadflkajsdfkj: ", options);
 
 const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, options);
 

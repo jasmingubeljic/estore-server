@@ -15,15 +15,7 @@ const Category = require("../models/category");
 const app = express();
 const port = process.env.PORT || 3001;
 
-const fileStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "images");
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, file.fieldname + "-" + uniqueSuffix);
-  },
-});
+const fileStorage = multer.memoryStorage();
 
 const fileFilter = (req, file, cb) => {
   if (file.mimetype === "image/png" || file.mimetype === "image/jpg" || file.mimetype === "image/jpeg") {
@@ -33,11 +25,10 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-app.use(cors());
-app.use(express.json());
 app.use(multer({ storage: fileStorage, fileFilter: fileFilter }).single("image"));
 
-app.use("/images", express.static(path.join(__dirname, "../images")));
+app.use(cors());
+app.use(express.json());
 
 app.use(async (req, res, next) => {
   const user = await User.findByPk(1);

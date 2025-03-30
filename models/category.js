@@ -12,7 +12,7 @@ const Category = sequelize.define("category", {
     type: Sequelize.STRING,
     allowNull: false,
   },
-  imageUrl: {
+  image: {
     type: Sequelize.STRING,
     allowNull: false,
   },
