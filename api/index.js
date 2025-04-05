@@ -4,7 +4,7 @@ const cors = require("cors");
 const shopRoutes = require("../routes/shop");
 const authRoutes = require("../routes/auth");
 const adminRoutes = require("../routes/admin");
-const sequelize = require("../util/database");
+const sequelize = require("../utils/database");
 const bcrypt = require("bcrypt");
 const multer = require("multer");
 
